@@ -1,17 +1,19 @@
 #!/bin/sh
 
-if [ -z "${COMMIT}" ]; then
-  echo "The COMMIT environment variable is NOT set, but is required."
-fi
-
 if [ -z "${VERSION}" ]; then
   echo "The VERSION environment variable is NOT set, but is required."
+  exit
 fi
+
+COMMIT=${COMMIT:-`git rev-parse HEAD`}
+
+NAME=`git remote get-url origin | cut --delimiter='/' --fields=2 | cut --delimiter='.' --fields=1`
 
 git tag --annotate --message "Release ${VERSION}" ${VERSION} ${COMMIT}
 git push origin ${VERSION}
 
-docker build --tag xsystems/windhappers-proxy:${VERSION} "https://github.com/xsystems/windhappers-proxy.git#${COMMIT}"
-docker tag xsystems/windhappers-proxy:${VERSION} xsystems/windhappers-proxy:latest
-docker push xsystems/windhappers-proxy:${VERSION}
-docker push xsystems/windhappers-proxy:latest
+./build.sh
+
+docker push xsystems/${NAME}:${VERSION}
+docker push xsystems/${NAME}:latest
+
