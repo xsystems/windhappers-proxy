@@ -10,7 +10,7 @@ Run the [build.sh](build.sh) script.
 
 ## Run
 
-When running a container of this image you **must** set the environment variable `WINDHAPPERS_PROXY_DOMAIN` to the desired domain that resolves to your machine.
+When running a container of this image you **must** set the environment variable `LETSENCRYPT_DOMAINS` to the desired domain that resolves to your machine.
 
 
 ## Release the Image
